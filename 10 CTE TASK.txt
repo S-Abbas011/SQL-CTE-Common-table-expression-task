@@ -1,0 +1,12 @@
+10 CTE (Common Table Expression) TASK 
+1)Using a CTE, calculate the total Sales per Customer, and then display the top 10 customers by sales.
+2)Using a CTE that joins Customers, Orders, and Products, identify the top-selling Product in each Region.
+3)Write a recursive CTE to generate dates from 2024-01-01 to 2024-01-10.
+4)Create a CTE to calculate Profit Margin (Profit / Sales) for each Product, and return the top 5 Products by margin.
+5)Using a CTE with a window function, assign a row number to each Order per Customer. Return only the first order of each Customer.
+6)Create a CTE to list all customers whose total Sales exceed 10,000.
+ 7)Using nested CTEs, find the Region with the highest total Sales and return its details.
+8)Using a CTE, identify the most profitable Subcategory within each Category.
+9)Write a CTE that combines all Customers from the East and West regions using a UNION, and return the unique Customer names.
+10)Using a CTE with a running total, calculate cumulative Sales for each Customer (ordered by OrderDate).
+
