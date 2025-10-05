@@ -1,2 +1,197 @@
 # SQL-CTE-Common-table-expression-task
 I've solved 20 cte problem 
+
+--CTE(Common table expression)
+-- 1.Using a CTE, calculate the total Sales per Customer, and then display the top 10 customers by sales.
+
+with total_sales_per_cust as (
+Select s.sales, c.customer_name
+from sales as s
+join customer as c
+on s.customer_id = c.customer_id 
+)
+select 
+	sum(sales) as Total_sales,
+	customer_name
+from total_sales_per_cust
+group by customer_name
+order by Total_sales desc
+limit 10
+
+
+--2.  Using a CTE that joins Customers, Orders, and Products, identify the top-selling Product in each Region.
+
+with top_selling_region as (
+select c.region, p.product_name,
+sum(s.sales) as Total_sales
+from sales as s 
+join customer as c
+on s.customer_id = c.customer_id
+join product as p
+on s.product_id = p.product_id 
+group by region, product_name
+
+)
+Select 
+	Region,
+	product_name,
+	total_Sales
+from top_selling_region
+GROUP BY REGION,product_name,total_sales
+order by total_sales desc
+limit 4
+
+--3 Recursive 
+
+
+--4.	Create a CTE to calculate Profit Margin (Profit / Sales) for each Product, and return the top 5 Products by margin.
+
+With profit_margin as (
+select 
+	p.product_name, 
+	sum(s.profit) as Total_profit,
+	sum(s.sales) as Total_sales
+from product as p 
+join sales as s 
+on p.product_id = s.product_id
+group by product_name
+)
+select
+	product_name, 
+	total_profit,
+	Total_sales,
+ 	Total_profit / Total_sales as Total_margin
+from Profit_margin 
+order by total_margin desc
+limit 5 
+
+--5.	Using a CTE with a window function, assign a row number to each Order per Customer. Return only the first order of each Customer.
+ 
+WITH customer_orders AS (
+SELECT 
+	c.customer_id,
+	c.customer_name,
+	s.order_id,
+	s.order_date,
+	ROW_NUMBER() over(partition by c.customer_id
+	order by s.Order_date) as rows_num
+FROM customer c
+JOIN sales as s
+ON c.Customer_id = s.Customer_id
+)
+SELECT 
+    Customer_id,
+    Customer_Name,
+    Order_id,
+    Order_date
+FROM customer_orders
+WHERE rows_num = 1;
+
+
+--6. Create a CTE to list all customers whose total Sales exceed 10,000.
+
+with customer_exceed as (
+Select c.customer_name, sum(s.sales) as Total_sales
+from customer as c 
+join sales as s
+on c.customer_id = s.customer_id
+group by customer_name
+)
+Select customer_name , Total_sales
+from customer_exceed
+where total_sales > 10000
+order by total_sales 
+
+-- another method
+
+select 
+	sum(s.sales) as total_sales,
+	c.customer_name
+from sales as s
+join customer as c
+on s.customer_id = c.customer_id
+where sales > 10000
+group by customer_name
+order by total_sales
+
+
+--7.	Using nested CTEs, find the Region with the highest total Sales and return its details.
+
+with highest_sales as(
+Select 
+	c.region,
+	sum(s.sales) as Total_sales
+	from customer as c
+join sales as s 
+on c.customer_id = s.customer_id 
+group by region
+),
+max_sales as (
+select max(Total_sales) as max_total_sales
+from highest_sales
+)
+select 
+	hs.region,
+	ms.max_total_sales
+from highest_sales as hs
+join max_sales as ms
+on hs.Total_Sales = ms.max_total_sales
+
+--8 Using a CTE, identify the most profitable Subcategory within each Category
+
+with Profitable_subcategory as(
+select 
+	p.sub_category,
+	sum(s.profit) as Total_Profit
+from product as p 
+join sales as s 
+on p.product_id = s.product_id 
+group by sub_category 
+),
+max_profit as (
+select 
+	max(Total_Profit) as Max_total_profit
+from Profitable_subcategory
+)
+select 
+	ps.sub_category, 
+	mp.max_total_profit 
+from Profitable_subcategory as ps
+join max_profit as mp 
+on ps.Total_profit = mp.max_total_profit 
+
+
+-- 9 Write a CTE that combines all Customers from the East and West regions using a UNION, and return the unique Customer names
+
+with east_west_customers as( 
+Select 
+	customer_name,
+	region
+from customer 
+where region = 'East'
+union 
+select 
+	customer_name,
+	region 
+from customer
+where region = 'West'
+)
+select distinct customer_name,region 
+from east_west_customers
+
+--10 Using a CTE with a running total, calculate cumulative Sales for each Customer (ordered by OrderDate).
+
+with sales_for_each_Customer as (
+Select 
+	distinct c.customer_name, 
+	s.order_date,
+	sales,
+	sum(s.sales) over(partition by c.customer_id
+	order by s.order_date) Total_sales_by_each_cust
+from customer as c 
+join sales as s 
+on c.customer_id = s.customer_id
+)
+select *
+from sales_for_each_Customer 
+order by customer_name,order_date 
