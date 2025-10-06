@@ -2,7 +2,8 @@
 I've solved 20 cte problem 
 
 --CTE(Common table expression)
--- 1.Using a CTE, calculate the total Sales per Customer, and then display the top 10 customers by sales.
+### 1.Using a CTE, calculate the total Sales per Customer, and then display the top 10 customers by sales.
+```SQL
 
 with total_sales_per_cust as (
 Select s.sales, c.customer_name
@@ -18,8 +19,11 @@ group by customer_name
 order by Total_sales desc
 limit 10
 
+```
 
---2.  Using a CTE that joins Customers, Orders, and Products, identify the top-selling Product in each Region.
+### 2.Using a CTE that joins Customers, Orders, and Products, identify the top-selling Product in each Region.
+
+```SQL
 
 with top_selling_region as (
 select c.region, p.product_name,
@@ -41,10 +45,12 @@ GROUP BY REGION,product_name,total_sales
 order by total_sales desc
 limit 4
 
---3 Recursive 
+```
+SQL
 
+### 4.Create a CTE to calculate Profit Margin (Profit / Sales) for each Product, and return the top 5 Products by margin.
 
---4.	Create a CTE to calculate Profit Margin (Profit / Sales) for each Product, and return the top 5 Products by margin.
+```SQL
 
 With profit_margin as (
 select 
@@ -65,8 +71,12 @@ from Profit_margin
 order by total_margin desc
 limit 5 
 
---5.	Using a CTE with a window function, assign a row number to each Order per Customer. Return only the first order of each Customer.
- 
+```
+
+### 5.Using a CTE with a window function, assign a row number to each Order per Customer. Return only the first order of each Customer.
+
+ ```SQL
+
 WITH customer_orders AS (
 SELECT 
 	c.customer_id,
@@ -87,6 +97,7 @@ SELECT
 FROM customer_orders
 WHERE rows_num = 1;
 
+```
 
 --6. Create a CTE to list all customers whose total Sales exceed 10,000.
 
