@@ -1,7 +1,7 @@
-# SQL-CTE-Common-table-expression-task
-I've solved 20 cte problem 
+### SQL-CTE-Common-table-expression-task
+### I've solved 20 cte problem
+### CTE(Common table expression)
 
---CTE(Common table expression)
 ### 1.Using a CTE, calculate the total Sales per Customer, and then display the top 10 customers by sales.
 ```SQL
 
