@@ -99,8 +99,9 @@ WHERE rows_num = 1;
 
 ```
 
---6. Create a CTE to list all customers whose total Sales exceed 10,000.
+### 6.Create a CTE to list all customers whose total Sales exceed 10,000.
 
+```SQL
 with customer_exceed as (
 Select c.customer_name, sum(s.sales) as Total_sales
 from customer as c 
@@ -113,8 +114,10 @@ from customer_exceed
 where total_sales > 10000
 order by total_sales 
 
--- another method
+```
+### another method
 
+```SQL
 select 
 	sum(s.sales) as total_sales,
 	c.customer_name
@@ -125,9 +128,11 @@ where sales > 10000
 group by customer_name
 order by total_sales
 
+```
 
---7.	Using nested CTEs, find the Region with the highest total Sales and return its details.
+### 7.Using nested CTEs, find the Region with the highest total Sales and return its details.
 
+```SQL
 with highest_sales as(
 Select 
 	c.region,
@@ -148,8 +153,11 @@ from highest_sales as hs
 join max_sales as ms
 on hs.Total_Sales = ms.max_total_sales
 
---8 Using a CTE, identify the most profitable Subcategory within each Category
+```
 
+### 8.Using a CTE, identify the most profitable Subcategory within each Category
+
+```SQL
 with Profitable_subcategory as(
 select 
 	p.sub_category,
@@ -171,8 +179,11 @@ from Profitable_subcategory as ps
 join max_profit as mp 
 on ps.Total_profit = mp.max_total_profit 
 
+```
 
--- 9 Write a CTE that combines all Customers from the East and West regions using a UNION, and return the unique Customer names
+### 9.Write a CTE that combines all Customers from the East and West regions using a UNION, and return the unique Customer names
+
+```SQL
 
 with east_west_customers as( 
 Select 
@@ -189,9 +200,10 @@ where region = 'West'
 )
 select distinct customer_name,region 
 from east_west_customers
+```
 
---10 Using a CTE with a running total, calculate cumulative Sales for each Customer (ordered by OrderDate).
-
+### 10 Using a CTE with a running total, calculate cumulative Sales for each Customer (ordered by OrderDate).
+```SQL
 with sales_for_each_Customer as (
 Select 
 	distinct c.customer_name, 
@@ -206,3 +218,4 @@ on c.customer_id = s.customer_id
 select *
 from sales_for_each_Customer 
 order by customer_name,order_date 
+```
